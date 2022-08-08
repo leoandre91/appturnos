@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Turno</title>
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+
+        .form-signin {
+            max-width: 100vh;
+            padding: 15px;
+        }
+
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toast-container top-0 end-0 p-3">
+        <div id="toast1" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive"
+            aria-atomic="true" data-bs-autohide="true" data-bs-delay="2000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Turno Guardado y Enviado al area correspondiente.
+                </div>
+            </div>
+        </div>
+        <div id="error1" class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive"
+            aria-atomic="true" data-bs-autohide="true" data-bs-delay="2000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Numero de Identificación no existe.
+                </div>
+            </div>
+        </div>
+        <div id="error-g" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+            aria-atomic="true" data-bs-autohide="true" data-bs-delay="2000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Error. Consulte en consola.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="form-signin w-100 m-auto">
+        <form id="turno">
+            <h1 class="h3 mb-3 fw-normal text-center">Crear Turno</h1>
+            <div class="mb-3">
+                <label id="texto"></label>
+            </div>
+            <div class="mb-3">
+                <label>Seleccione el Servicio</label>
+                <select class="form-select" id="tipo_servicio">
+                    <option selected="selected" value="SP">Servicios Publicos</option>
+                    <option value="D">Denuncias</option>
+                    <option value="PI">Pago de Impuestos</option>
+                    <option value="EP">Educacion Publica</option>
+                    <option value="M">Movilidad</option>
+                </select>
+            </div>
+
+            <button id="submitbtn" type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </main>
+</body>
+<script src="../assets/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    const toasterrorg = document.getElementById('error-g');
+    const toasterror1 = document.getElementById('error1');
+    const toast1 = document.getElementById('toast1');
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    var cliente = '';
+
+    $(document).ready(function () {
+        fetch('http://192.168.0.145:5185/api/Clientes/GetClientesCe/' + getParameterByName('id'), {
+            method: 'GET'
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.text()
+                } else {
+                    const toast = new bootstrap.Toast(toasterror1);
+                    toast.show();
+                    document.getElementById("submitbtn").disabled = true;
+                }
+            }).then(function (texto) {
+                if (texto != undefined && texto != 'null') {
+                    data = JSON.parse(texto);
+                    cargar_texto(data);
+                } else {
+                    const toast = new bootstrap.Toast(toasterror1);
+                    toast.show();
+                    document.getElementById("submitbtn").disabled = true;
+                }
+            }).catch(function (err) {
+                const toast = new bootstrap.Toast(toasterrorg);
+                toast.show();
+                conlose.log(err);
+                document.getElementById("submitbtn").disabled = true;
+            });
+    });
+
+    function cargar_texto(data) {
+        cliente = data;
+        document.getElementById("texto").innerHTML = "<strong>Nombre:</strong> " + data.NombreCliente + " " + data.ApellidosCliente + "<br><strong>Identificación:</strong> " + data.TipoIdentificacionCliente + data.NoIdentificacionCliente;
+    }
+
+    $("#turno").submit(function (event) {
+        event.preventDefault();
+
+        fetch('http://192.168.0.145:5185/api/Turno/GetUltimoTurno/' + (document.getElementById("tipo_servicio").selectedIndex + 1), {
+            method: 'GET'
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.text()
+                } else {
+                    const toast = new bootstrap.Toast(toasterrorg);
+                    toast.show();
+                    document.getElementById("submitbtn").disabled = true;
+                    console.log('Error al buscar el ultimo turno en la DB.');
+                }
+            }).then(function (texto) {
+                if (texto != undefined && texto != 'null') {
+                    data = JSON.parse(texto);
+                    var numero = 0;
+                    if (data.length == 0) {
+                        numero = 1
+                    } else {
+                        numero = (data[0].NoTurno) + 1
+                    }
+                    var form_data = {
+                        clienteId: cliente.Id,
+                        tipoServicioId: document.getElementById("tipo_servicio").selectedIndex + 1,
+                        noTurno: numero,
+                        tipoTurno: document.getElementById("tipo_servicio").value,
+                        estadoTruno: 'En Espera'
+                    };
+                    crear_turno(form_data);
+                } else {
+                    const toast = new bootstrap.Toast(toasterrorg);
+                    toast.show();
+                    document.getElementById("submitbtn").disabled = true;
+                    console.log('Error al buscar el ultimo turno en la DB.');
+                }
+            }).catch(function (err) {
+                const toast = new bootstrap.Toast(toasterrorg);
+                toast.show();
+                conlose.log(err);
+                document.getElementById("submitbtn").disabled = true;
+            });
+    });
+
+    function crear_turno(form_data) {
+        fetch('http://192.168.0.145:5185/api/ServicioClientes/PostServicioCliente', {
+            method: 'POST',
+            body: JSON.stringify(form_data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.text()
+                } else {
+                    const toast = new bootstrap.Toast(toasterrorg);
+                    toast.show();
+                    conlose.log('Error en la llamada Ajax');
+                    document.getElementById("submitbtn").disabled = true;
+                }
+            })
+            .then(function (texto) {
+                if (texto != undefined) {
+                    const toast = new bootstrap.Toast(toast1);
+                    toast.show();
+                    setTimeout(function () {
+                        window.location.replace("../admin/");
+                    }, 2000);
+                    document.getElementById("submitbtn").disabled = true;
+                }
+            })
+            .catch(function (err) {
+                const toast = new bootstrap.Toast(toasterrorg);
+                toast.show();
+                conlose.log(err);
+                document.getElementById("submitbtn").disabled = true;
+            });
+    }
+</script>
+
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Cliente</title>
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+
+        .form-signin {
+            max-width: 100vh;
+            padding: 15px;
+        }
+
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toast-container top-0 end-0 p-3">
+        <div id="toast1" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive"
+            aria-atomic="true" data-bs-autohide="true" data-bs-delay="2000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Cliente creado correctamente.
+                </div>
+            </div>
+        </div>
+        <div id="error-g" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+            aria-atomic="true" data-bs-autohide="true" data-bs-delay="2000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Error. Consulte en consola.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="form-signin w-100 m-auto">
+        <form id="cliente">
+            <h1 class="h3 mb-3 fw-normal text-center">Nuevo Cliente</h1>
+            <div class="mb-3">
+                <label for="nombres" class="form-label">Nombres</label>
+                <input type="text" class="form-control" id="nombres">
+            </div>
+            <div class="mb-3">
+                <label for="apellidos" class="form-label">Apellidos</label>
+                <input type="text" class="form-control" id="apellidos">
+            </div>
+            <div class="mb-3">
+                <label for="edad" class="form-label">Edad</label>
+                <input type="number" class="form-control" id="edad">
+            </div>
+            <div class="mb-3">
+                <label for="sexo" class="form-label">Sexo</label>
+                <select class="form-select" id="sexo">
+                    <option selected="selected" value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="tipo_iden" class="form-label">Tipo Identificación</label>
+                <select class="form-select" id="tipo_iden">
+                    <option selected="selected" value="CC">Cédula de Ciudadanía</option>
+                    <option value="NIT">NIT</option>
+                    <option value="CON">Contraseña</option>
+                    <option value="TI">Tarjeta de Identidad</option>
+                    <option value="CE">Cédula de Extranjería</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Número de Identificación</label>
+                <input type="number" class="form-control" name="iden" id="iden" autocomplete="off">
+            </div>
+            <div class="mb-3">
+                <label>Departamento</label>
+                <input type="text" class="form-control" id="departamento">
+            </div>
+            <div class="mb-3">
+                <label>Ciudad</label>
+                <input type="text" class="form-control" id="ciudad">
+            </div>
+            <div class="mb-3">
+                <label>Barrio</label>
+                <input type="text" class="form-control" id="barrio">
+            </div>
+            <div class="mb-3">
+                <label>Dirección</label>
+                <input type="text" class="form-control" id="direccion">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </main>
+</body>
+<script src="../assets/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    const toasterrorg = document.getElementById('error-g');
+    const toast1 = document.getElementById('toast1');
+
+    $("#cliente").submit(function (event) {
+        var form_data = {
+            nombreCliente: document.getElementById("nombres").value,
+            apellidosCliente: document.getElementById("apellidos").value,
+            edadCliente: document.getElementById("edad").value,
+            sexoCliente: document.getElementById("sexo").value,
+            tipoIdentificacionCliente: document.getElementById("tipo_iden").value,
+            noIdentificacionCliente: document.getElementById("iden").value,
+            departamentoCliente: document.getElementById("departamento").value,
+            ciudadCliente: document.getElementById("ciudad").value,
+            barrioCliente: document.getElementById("barrio").value,
+            direccionCliente: document.getElementById("direccion").value
+        };
+
+        fetch('http://192.168.0.145:5185/api/Clientes/PostClientes', {
+            method: 'POST',
+            body: JSON.stringify(form_data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.text()
+                } else {
+                    const toast = new bootstrap.Toast(toasterrorg);
+                    toast.show();
+                    console.log('Error en la llamada Ajax');
+                }
+            })
+            .then(function (texto) {
+                if (texto != undefined) {
+                    const toast = new bootstrap.Toast(toast1);
+                    toast.show();
+                    setTimeout(function () {
+                        window.location.replace("crear_turno.html?id=" + document.getElementById("iden").value);
+                    }, 2000);
+
+                }
+            })
+            .catch(function (err) {
+                const toast = new bootstrap.Toast(toasterrorg);
+                toast.show();
+                console.log(err);
+            });
+        event.preventDefault();
+    });
+
+</script>
+
+</html>

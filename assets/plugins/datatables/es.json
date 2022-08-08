@@ -1,0 +1,19 @@
+{
+    "emptyTable": "El cliente no tiene turnos asignados.",
+    "info": "Mostrando _START_ de _END_ turnos, de _TOTAL_ en total.",
+    "infoEmpty": "Mostrando 0 de 0 turnos, de 0 en total.",
+    "infoFiltered": "(filtrado de un total de _MAX_ turnos)",
+    "infoThousands": ",",
+    "lengthMenu": "Mostrar _MENU_ turnos",
+    "loadingRecords": "Cargando...",
+    "processing": "Procesando...",
+    "search": "Buscar:",
+    "zeroRecords": "No se encontraron resultados",
+    "thousands": ",",
+    "paginate": {
+        "first": "Primero",
+        "last": "Último",
+        "next": "Siguiente",
+        "previous": "Anterior"
+    }
+} 
